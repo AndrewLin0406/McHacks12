@@ -2,20 +2,16 @@
 const YOUTUBE_API_KEY = 'AIzaSyCxoKJsnDtzDFAIRJhzs2g9b38VISIQfMY';
 
 // Function to search YouTube videos based on patient input
-function searchYouTubeVideos() {
-    console.log("Button Clicked!");
-    // Prompt user for symptoms
-    const symptoms = prompt("Enter your symptoms (e.g., headache, anxiety, relaxation music):");
-
+function searchYouTubeVideos(condition) {
     // Call YouTube API to search for videos
-    const searchQuery = encodeURIComponent(symptoms);
+    const searchQuery = encodeURIComponent(condition);
     const youtubeAPIUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${searchQuery}&maxResults=5&type=video&key=${YOUTUBE_API_KEY}`;
 
     fetch(youtubeAPIUrl)
         .then(response => response.json())
         .then(data => {
             if (data.items && data.items.length > 0) {
-                displayVideos(data.items);
+                displayVideos(data.items[1]);
             } else {
                 alert("No videos found for the given symptoms.");
             }
@@ -27,23 +23,26 @@ function searchYouTubeVideos() {
 }
 
 // Function to display the fetched YouTube videos
-function displayVideos(videos) {
+function displayVideos(video) {
     const videoContainer = document.getElementById('video-results');
     videoContainer.innerHTML = ''; // Clear previous results
 
-    videos.forEach(video => {
-        const videoElement = document.createElement('div');
-        videoElement.innerHTML = `
-            <h3>${video.snippet.title}</h3>
-            <img src="${video.snippet.thumbnails.medium.url}" alt="${video.snippet.title}">
-            <br>
-            <a href="https://www.youtube.com/watch?v=${video.id.videoId}" target="_blank">Watch Video</a>
-            <hr>
-        `;
-        videoContainer.appendChild(videoElement);
-    });
-}
+    const videoElement = document.createElement('div');
+    videoElement.innerHTML = `
+        <h3>${video.snippet.title}</h3>
+        <img 
+            src="${video.snippet.thumbnails.medium.url}" 
+            alt="${video.snippet.title}" 
+            style="width: 200px; height: auto;"> <!-- Smaller thumbnail -->
+        <br>
+        <a href="https://www.youtube.com/watch?v=${video.id.videoId}" target="_blank">Watch Video</a>
+        <hr>
+    `;
+    videoContainer.appendChild(videoElement);
 
-searchYouTubeVideos();
+    /* videos.forEach(video => {
+        
+    }); */
+}
 
 

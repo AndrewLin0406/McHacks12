@@ -25,20 +25,24 @@
 
     <section class="patient-info">
         <h2>Patient Information</h2>
-        
-        <form action="/submit" method="POST">
+
+        <form action="Submitted.html" method="GET">
             <label for="name">Full Name:</label>
             <input type="text" id="name" name="name" required>
-        
+          
             <label for="age">Age:</label>
             <input type="number" id="age" name="age" required>
-        
+          
             <label for="medicalCondition">Medical Condition:</label>
-            <input type="text"  id="medicalCondition" name="medicalCondition" required></input>
+            <input type="text" id="medicalCondition" name="medicalCondition" required>
+          
             <button type="submit">Submit</button>
-        </form>
-        
+          </form>
+        <script>
+            console.log(document.getElementById('medicalCondition'))
+        </script>
     </section>
+
     
     
 </body>
