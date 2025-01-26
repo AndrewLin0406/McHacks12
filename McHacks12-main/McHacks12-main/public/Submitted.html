@@ -29,14 +29,11 @@
                 <div class="time-box">
                     
                 </div>
-                <div class="time-box">
-                    
-                </div>
                 
                 <script>
                     function getQueryParam(name) {
                         const urlParams = new URLSearchParams(window.location.search);
-                        return urlParams.get(name); 
+                        return urlParams.get(name);  // Returns the value of the parameter
                     }
 
                     const TriageCategory = {
@@ -64,77 +61,18 @@
                         const [min, max] = waitRanges[triageCategory];
                         return Math.floor(Math.random() * (max - min + 1)) + min;
                     }
-
-                    function getQueue() {
-                        return Math.floor(Math.random() * 5) + 1;
-                    }
-
                     var waittime = computeWaitTime(condition[getQueryParam('medicalCondition')])
                     var txt = "Estimated wait time: " + waittime + " minutes" 
                     document.getElementsByClassName("time-box")[0].innerHTML = txt
-
-                    var queue = getQueue()
-                    var txt2 = "Number in Queue: " + queue
-                    document.getElementsByClassName("time-box")[1].innerHTML = txt2
                 </script>
             </section>
             <section class="features">
                 <h2>Features</h2>
                 <div class="feature-box">
                     <div class="feature-item">
-
-                        <div id="status-display">Current STATUS: <span id="current-status">Triage</span></div>
-                        <div id="buttons-container" style="margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                            <button class="btn" id="next-btn" onclick="goToNextStatus()">Go to next STATUS</button>
-                        </div>
+                        <h3>Real-Time Updates</h3>
+                        <p>Stay informed about your wait time and position in the queue.</p>
                     </div>
-                    <script>
-                        const STATUS = [
-                            "Triage", "Registration", "The First Wait", "Initial Assessment", "Investigation", "Review", "Treatment", "End", "The Second Wait"
-                        ];
-                
-                        const statusFlow = {
-                            "Triage": ["Registration"],
-                            "Registration": ["The First Wait", "Initial Assessment"],
-                            "The First Wait": ["Initial Assessment"],
-                            "Initial Assessment": ["Investigation", "Treatment"],
-                            "Investigation": ["End", "The Second Wait"],
-                            "The Second Wait": ["Review"],
-                            "Review": ["End", "Treatment"],
-                            "Treatment": ["End"],
-                        };
-                
-                        let currentStatus = "Triage";
-                
-                        function goToNextStatus(selectedOption = null) {
-                            let possibleNextStatuses = statusFlow[currentStatus];
-                            
-                            if (possibleNextStatuses.length === 1 || selectedOption) {
-                                currentStatus = selectedOption || possibleNextStatuses[0];
-                                updateStatusDisplay();
-                            } else {
-                                displayChoiceButtons(possibleNextStatuses);
-                                return;
-                            }
-                
-                            if (currentStatus === "End") {
-                                document.getElementById("buttons-container").innerHTML = "";
-                                alert("Your Treatment Has Been Completed, Have a Great Rest Of Your Day!");
-                            }
-                        }
-                
-                        function updateStatusDisplay() {
-                            document.getElementById("current-status").textContent = currentStatus;
-                            document.getElementById ("buttons-container").innerHTML = '<button class="btn" onclick="goToNextStatus()">Go to next STATUS</button>';
-                        }
-                
-                        function displayChoiceButtons(choices) {
-                            let buttonsHTML = choices.map(choice => `<button class="btn" onclick="goToNextStatus('${choice}')">${choice}</button>`).join(' ');
-                            document.getElementById("buttons-container").innerHTML = buttonsHTML;
-                        }
-
-
-                    </script>
                     <div class="feature-item">
                         <h3>Interactive FAQ</h3>
                         <p>Get answers to common questions while you wait.</p>
