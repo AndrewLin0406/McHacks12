@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Status Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #status-display {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="status-display">Current STATUS: <span id="current-status">Triage</span></div>
+    <p id="prompt">Are you planning to go next based on Doctors and Nurses' suggestion? If so, click the right button next to this. If not, do not click any button. If you are given 2 buttons, please choose one to click.</p>
+    <div id="buttons-container">
+        <button class="btn" id="next-btn" onclick="goToNextStatus()">Go to next STATUS</button>
+    </div>
+
+    <script>
+        const STATUS = [
+            "Triage", "Registration", "The First Wait", "Initial Assessment", "Investigation", "Review", "Treatment", "End", "The Second Wait"
+        ];
+
+        const statusFlow = {
+            "Triage": ["Registration"],
+            "Registration": ["The First Wait", "Initial Assessment"],
+            "The First Wait": ["Initial Assessment"],
+            "Initial Assessment": ["Investigation", "Treatment"],
+            "Investigation": ["End", "The Second Wait"],
+            "The Second Wait": ["Review"],
+            "Review": ["End", "Treatment"],
+            "Treatment": ["End"],
+        };
+
+        let currentStatus = "Triage";
+
+        function goToNextStatus(selectedOption = null) {
+            let possibleNextStatuses = statusFlow[currentStatus];
+            
+            if (possibleNextStatuses.length === 1 || selectedOption) {
+                currentStatus = selectedOption || possibleNextStatuses[0];
+                updateStatusDisplay();
+            } else {
+                displayChoiceButtons(possibleNextStatuses);
+                return;
+            }
+
+            if (currentStatus === "End") {
+                document.getElementById("buttons-container").innerHTML = "";
+                alert("Process completed. STATUS is now at End.");
+            }
+        }
+
+        function updateStatusDisplay() {
+            document.getElementById("current-status").textContent = currentStatus;
+            document.getElementById("buttons-container").innerHTML = '<button class="btn" onclick="goToNextStatus()">Go to next STATUS</button>';
+        }
+
+        function displayChoiceButtons(choices) {
+            let buttonsHTML = choices.map(choice => `<button class="btn" onclick="goToNextStatus('${choice}')">${choice}</button>`).join(' ');
+            document.getElementById("buttons-container").innerHTML = buttonsHTML;
+        }
+    </script>
+</body>
+</html>
